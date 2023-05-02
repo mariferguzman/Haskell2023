@@ -37,7 +37,12 @@ likesDePublicacion (_, _, us) = us
 -- Ejercicios
 
 nombresDeUsuarios :: RedSocial -> [String]
-nombresDeUsuarios = undefined
+nombresDeUsuarios x = listaDeNombres (usuarios x)
+
+listaDeNombres :: [Usuario] -> [String]
+listaDeNombres [] = []
+listaDeNombres ((_, a):as) = a : listaDeNombres as
+
 
 -- describir qué hace la función: .....
 amigosDe :: RedSocial -> Usuario -> [Usuario]
