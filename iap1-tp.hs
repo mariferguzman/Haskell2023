@@ -23,10 +23,10 @@ publicaciones :: RedSocial -> [Publicacion]
 publicaciones (_, _, ps) = ps
 
 idDeUsuario :: Usuario -> Integer
-idDeUsuario (id, _) = id
+idDeUsuario (id, _) = id 
 
 nombreDeUsuario :: Usuario -> String
-nombreDeUsuario (_, nombre) = nombre
+nombreDeUsuario (_, nombre) = nombre 
 
 usuarioDePublicacion :: Publicacion -> Usuario
 usuarioDePublicacion (u, _, _) = u
@@ -42,7 +42,6 @@ nombresDeUsuarios x = listaDeNombres (usuarios x)
 listaDeNombres :: [Usuario] -> [String]
 listaDeNombres [] = []
 listaDeNombres ((_, a):as) = a : listaDeNombres as
-
 
 -- describir qué hace la función: .....
 amigosDe :: RedSocial -> Usuario -> [Usuario]
@@ -80,6 +79,7 @@ tieneUnSeguidorFiel = undefined
 existeSecuenciaDeAmigos :: RedSocial -> Usuario -> Usuario -> Bool
 existeSecuenciaDeAmigos = undefined
 
+
 mismosElementos :: Eq a => [a] -> [a] -> Bool
 mismosElementos a b | perteneceTodos a b = perteneceTodos b a
                     | otherwise = False
@@ -93,10 +93,3 @@ pertenece x (y:ys)
 perteneceTodos :: Eq a => [a] -> [a] -> Bool
 perteneceTodos [] _ = True
 perteneceTodos (x:xs) ys = pertenece x ys && perteneceTodos xs ys
-
-
-
-
-
-
-
