@@ -44,8 +44,18 @@ listaDeNombres [] = []
 listaDeNombres ((_, a):as) = a : listaDeNombres as
 
 -- describir qué hace la función: .....
+--amigosDe :: RedSocial -> Usuario -> [Usuario]
+--amigosDe = undefined
+
 amigosDe :: RedSocial -> Usuario -> [Usuario]
-amigosDe = undefined
+amigosDe (usuarios, relaciones, _) usuario = amigosDeRec relaciones []
+  where
+    amigosDeRec [] amigos = amigos
+    amigosDeRec ((u1, u2):rs) amigos
+      | u1 == usuario && pertenece u2 usuarios && not (pertenece u2 amigos) = amigosDeRec rs (u2:amigos)
+      | u2 == usuario && pertenece u1 usuarios && not (pertenece u1 amigos) = amigosDeRec rs (u1:amigos)
+      | otherwise = amigosDeRec rs amigos
+
 
 -- describir qué hace la función: .....
 cantidadDeAmigos :: RedSocial -> Usuario -> Int
