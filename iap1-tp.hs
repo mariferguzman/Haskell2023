@@ -57,13 +57,24 @@ amigosDe (usuarios, relaciones, _) usuario = amigosDeRec relaciones []
       | otherwise = amigosDeRec rs amigos
 
 
--- describir qué hace la función: .....
+-- Calcular la cantidad de amigos de un usuario
 cantidadDeAmigos :: RedSocial -> Usuario -> Int
-cantidadDeAmigos = undefined
+cantidadDeAmigos red usuario = length (amigosDe red usuario)
 
--- describir qué hace la función: .....
+-- Función principal para encontrar el usuario con más amigos
 usuarioConMasAmigos :: RedSocial -> Usuario
-usuarioConMasAmigos = undefined
+usuarioConMasAmigos red = usuarioConMasAmigosAux red (usuarios red)
+
+-- Función auxiliar que compara recursivamente los usuarios para encontrar el que tiene más amigos
+-- Si solo queda un usuario en la lista, devolvemos ese usuario
+-- Si hay más de un usuario en la lista, comparamos el primero con el que tiene más amigos en el resto de la lista
+usuarioConMasAmigosAux :: RedSocial -> [Usuario] -> Usuario
+usuarioConMasAmigosAux _ [u] = u
+usuarioConMasAmigosAux red (u:us)
+  | cantidadDeAmigos red u >= cantidadDeAmigos red usuarioConMasAmigosResto = u
+  | otherwise = usuarioConMasAmigosResto
+  where
+    usuarioConMasAmigosResto = usuarioConMasAmigosAux red us
 
 -- describir qué hace la función: .....
 estaRobertoCarlos :: RedSocial -> Bool
