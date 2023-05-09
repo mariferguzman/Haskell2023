@@ -1,6 +1,6 @@
 -- Completar con los datos del grupo
 --
--- Nombre de Grupo: xx
+-- Nombre de Grupo: sintaxError
 -- Integrante 1: Nombre Apellido, email, LU
 -- Integrante 2: Nombre Apellido, email, LU
 -- Integrante 3: Nombre Apellido, email, LU
