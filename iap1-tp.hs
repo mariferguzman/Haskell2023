@@ -144,9 +144,13 @@ f1 r [] p1 = False
 f1 r (y:ys) p1 | mismosElementos (publicacionesQueLeGustanA r y) p1 = True
                | otherwise = f1 r ys p1
 
--- describir qué hace la función: .....
+-- describir qué hace la función: 
+--deveulve el valor de verdad de una condicion dada por la union de tres condiciones que tienen que ser verdaderas
+-- la lista de usuarios de la red tiene que ser mayor a >= 2, y esta lista debe empezar por u1 y terminar con u2
 existeSecuenciaDeAmigos :: RedSocial -> Usuario -> Usuario -> Bool
-existeSecuenciaDeAmigos = undefined
+existeSecuenciaDeAmigos r u1 u2 = longitud (usuarios r) >= 2
+                                && empiezaCon u1 (usuarios r)
+                                && terminaCon u2 (usuarios r) 
 
 
 mismosElementos :: Eq a => [a] -> [a] -> Bool
