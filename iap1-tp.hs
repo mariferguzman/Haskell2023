@@ -61,7 +61,6 @@ amigosDe (usuarios, relaciones, _) usuario = amigosDeRec relaciones []
 -- Calcular la cantidad de amigos de un usuario
 cantidadDeAmigos :: RedSocial -> Usuario -> Int
 cantidadDeAmigos red usuario = length (amigosDe red usuario)
-cantidadDeAmigos red usuario = length (amigosDe red usuario)
 
 -- Función principal para encontrar el usuario con más amigos
 -- Función principal para encontrar el usuario con más amigos
@@ -237,8 +236,8 @@ auxiliar2 u1 (x:xs) | auxiliar1 u1 x = True
                     | otherwise = auxiliar2 u1 xs
 
 auxiliar1 :: Usuario -> Publicacion -> Bool
-auxiliar1 u1 (u2,s,v) | u1 == u2 = True
-                      | otherwise = False  
+auxiliar1 u1 (u2,s,v) = u1 == u2
+                        
                                                   
 
 
@@ -258,8 +257,7 @@ noPubliRepAux1 ((a,b),s1,u1) ((c,d),s2,u2) | a == c &&  b == d = funcion1 s1 s2
                                            | otherwise = True
 
 funcion1 :: String -> String -> Bool
-funcion1 s1 s2 | s1 /= s2 = True
-               | otherwise = False 
+funcion1 s1 s2 = s1 /= s2
 
 --
 
