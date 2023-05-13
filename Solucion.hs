@@ -119,6 +119,18 @@ lesGustanLasMismasPublicaciones r u1 u2 = publicacionesQueLeGustanA r u1 == publ
 --Ejercicio 9: coloquialmente hablando, corrobora que exista algún un usuario2 (distinto del usuario de entrada) que le haya dado like a todas las publicaciones del usuario de entrada.
 -- La logica esta en: publicacionesQueLeGustanA usuario2 = publicacionesDe usuarioDeEntrada; la cual se encuentra en la funcion "f1".
 
+-- Otra manera de hacer tieneUnSeguidorFiel
+seguidorfiel :: RedSocial -> Usuario -> Bool
+seguidorfiel r u = f3 r u (publicacionesDe r u)
+
+f3 :: RedSocial -> Usuario -> [Publicacion] -> Bool 
+f3 r u p = f4 r u (likesDePublicacion (head p))
+
+f4 :: RedSocial -> Usuario -> [Usuario] -> Bool
+f4 r u [] = False
+f4 r u (x:xs) | mismosElementos (publicacionesDe r u) (publicacionesQueLeGustanA r x) = True
+              | otherwise = f4 r u xs
+
 -- Lo que me interesa de aca es la lista de publicaciones perteneciente a la RedSocial y las publicaciones del Usuario dentro de esa RedSocial; van a ser utilizadas en las proximas funciones.
 -- El resultado dependerá de las funciones siguientes.
 tieneUnSeguidorFiel :: RedSocial -> Usuario -> Bool
