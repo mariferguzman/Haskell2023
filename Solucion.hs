@@ -221,12 +221,12 @@ usuariosValidos (x:xs) | usuarioValido x && noHayIdsRepetidos (x:xs) = usuariosV
 
 noHayRelacionesRepetidas :: [Relacion] -> Bool
 noHayRelacionesRepetidas [] = True
-noHayRelacionesRepetidas (x:xs) | noRelacionRepAux2 x xs == True = noHayRelacionesRepetidas xs
+noHayRelacionesRepetidas (x:xs) | noRelacionRepAux2 x xs = noHayRelacionesRepetidas xs
                                 | otherwise = False  
 
 noRelacionRepAux2 :: Relacion -> [Relacion] -> Bool
 noRelacionRepAux2 r1 [] = True
-noRelacionRepAux2 r1 (x:xs) | noRelacionRepAux1 r1 x == True = noRelacionRepAux2 r1 xs
+noRelacionRepAux2 r1 (x:xs) | noRelacionRepAux1 r1 x = noRelacionRepAux2 r1 xs
                             | otherwise = False
 
 noRelacionRepAux1 :: Relacion -> Relacion -> Bool
