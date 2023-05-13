@@ -113,7 +113,7 @@ publicacionesQueLeGustanAux (x:xs) u | pertenece u (likesDePublicacion x) = x : 
 
 -- describir qué hace la función: .....
 lesGustanLasMismasPublicaciones :: RedSocial -> Usuario -> Usuario -> Bool
-lesGustanLasMismasPublicaciones = undefined
+lesGustanLasMismasPublicaciones r u1 u2 = publicacionesQueLeGustanA r u1 == publicacionesQueLeGustanA r u2 
 
 
 --Ejercicio 9: coloquialmente hablando, corrobora que exista algún un usuario2 (distinto del usuario de entrada) que le haya dado like a todas las publicaciones del usuario de entrada.
