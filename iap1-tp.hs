@@ -1,6 +1,6 @@
 -- Completar con los datos del grupo
 --
--- Nombre de Grupo: xx
+-- Nombre de Grupo: sintaxError
 -- Integrante 1: Nombre Apellido, email, LU
 -- Integrante 2: Nombre Apellido, email, LU
 -- Integrante 3: Nombre Apellido, email, LU
@@ -58,9 +58,12 @@ amigosDe (usuarios, relaciones, _) usuario = amigosDeRec relaciones []
 
 
 -- Calcular la cantidad de amigos de un usuario
+-- Calcular la cantidad de amigos de un usuario
 cantidadDeAmigos :: RedSocial -> Usuario -> Int
 cantidadDeAmigos red usuario = length (amigosDe red usuario)
+cantidadDeAmigos red usuario = length (amigosDe red usuario)
 
+-- Función principal para encontrar el usuario con más amigos
 -- Función principal para encontrar el usuario con más amigos
 usuarioConMasAmigos :: RedSocial -> Usuario
 usuarioConMasAmigos red = usuarioConMasAmigosAux red (usuarios red)
