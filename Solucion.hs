@@ -1,3 +1,4 @@
+module Solution where
 -- Completar con los datos del grupo
 --
 -- Nombre de Grupo: sintaxError
@@ -36,6 +37,7 @@ likesDePublicacion (_, _, us) = us
 
 -- Ejercicios
 
+-- Ejercicio 1
 nombresDeUsuarios :: RedSocial -> [String]
 nombresDeUsuarios x = listaDeNombres (usuarios x)
 
@@ -43,25 +45,39 @@ listaDeNombres :: [Usuario] -> [String]
 listaDeNombres [] = []
 listaDeNombres ((_, a):as) = a : listaDeNombres as
 
--- describir qué hace la función: .....
---amigosDe :: RedSocial -> Usuario -> [Usuario]
---amigosDe = undefined
 
+-- Ejercicio 2
+-- describir qué hace la función: .....
 amigosDe :: RedSocial -> Usuario -> [Usuario]
 amigosDe (usuarios, relaciones, _) usuario = amigosDeRec relaciones []
   where
     amigosDeRec [] amigos = amigos
     amigosDeRec ((u1, u2):rs) amigos
-      | u1 == usuario && pertenece u2 usuarios && not (pertenece u2 amigos) = amigosDeRec rs (u2:amigos)
-      | u2 == usuario && pertenece u1 usuarios && not (pertenece u1 amigos) = amigosDeRec rs (u1:amigos)
+      | u1 == usuario && pertenece u2 usuarios && not (pertenece u2 amigos) = amigosDeRec rs (amigos ++ [u2])
+      | u2 == usuario && pertenece u1 usuarios && not (pertenece u1 amigos) = amigosDeRec rs (amigos ++ [u1])
       | otherwise = amigosDeRec rs amigos
 
 
--- Calcular la cantidad de amigos de un usuario
+-- Ejercicio 3
 -- Calcular la cantidad de amigos de un usuario
 cantidadDeAmigos :: RedSocial -> Usuario -> Int
-cantidadDeAmigos red usuario = length (amigosDe red usuario)
+cantidadDeAmigos red usuario = contarAmigos red usuario 0
 
+-- Es una función auxiliar que realiza la recursión y utiliza un acumulador para contar los amigos
+contarAmigos :: RedSocial -> Usuario -> Int -> Int
+contarAmigos (_, relaciones, _) usuario acc = contarAmigosAux relaciones usuario acc
+
+-- Esta función pasando el valor inicial del acumulador como 0.
+-- Luego, la recursión se encarga de verificar las relaciones y aumentar el acumulador en caso de encontrar amigos válidos.
+-- Al final, el valor del acumulador será la cantidad de amigos del usuario.
+contarAmigosAux :: [Relacion] -> Usuario -> Int -> Int
+contarAmigosAux [] _ acc = acc
+contarAmigosAux ((u1, u2):rs) usuario acc
+  | u1 == usuario = contarAmigosAux rs usuario (acc + 1)
+  | u2 == usuario = contarAmigosAux rs usuario (acc + 1)
+  | otherwise = contarAmigosAux rs usuario acc
+
+-- Ejercicio 4
 -- Función principal para encontrar el usuario con más amigos
 -- Función principal para encontrar el usuario con más amigos
 usuarioConMasAmigos :: RedSocial -> Usuario
@@ -78,91 +94,89 @@ usuarioConMasAmigosAux red (u:us)
   where usuarioConMasAmigosResto = usuarioConMasAmigosAux red us
     
 
+-- Ejercicio 5
 -- describir qué hace la función: .....
 estaRobertoCarlos :: RedSocial -> Bool
-estaRobertoCarlos = undefined
+estaRobertoCarlos r = auxRC r (usuarios r)
 
+auxRC :: RedSocial -> [Usuario] -> Bool
+auxRC r [] = False
+auxRC r (u:us)
+  | cantidadDeAmigos r u >= 10 = True
+  | otherwise = auxRC r us
+
+
+-- Ejercicio 6
+-- funcionAux. Dada una lista de Publicaciones y el Usuario, obtengo una lista de Publicaciones pertenecientes a ese Usuario.
 publicacionesDe :: RedSocial -> Usuario -> [Publicacion]
 publicacionesDe r u = funcionAuxPublicacionesDe (publicaciones r) u 
 
--- funcionAux. Dada una lista de Publicaciones y el Usuario, obtengo una lista de Publicaciones pertenecientes a ese Usuario.
-
-funcionAuxPublicacionesDe :: [Publicacion] -> Usuario -> [Publicacion]
-funcionAuxPublicacionesDe [] u = []
-funcionAuxPublicacionesDe (x:xs) u | usuarioDePublicacion x == u = x : funcionAuxPublicacionesDe xs u
-                                   | otherwise = funcionAuxPublicacionesDe xs u    
 --1.Tomo la primer publicacion de la lista.
 --2.Comparo el usuario de la primer publicacion con el Usuario dado.
 --3.Si son iguales, entonces lo quiero en la lista.
 --Con la primera publicacion que suceda esto, sera la cabeza de la lista. Luego, tiene que proseguir con la siguiente publicacion. Para armar la lista, justamente utilizo la recursion.        
 --En caso de que el usuario de la publicacion no coincida con el usuario dado, hay que pasar a la siguiente publicación y ver si ese coincide o no (y asi sucesivamente).
+funcionAuxPublicacionesDe :: [Publicacion] -> Usuario -> [Publicacion]
+funcionAuxPublicacionesDe [] u = []
+funcionAuxPublicacionesDe (x:xs) u | usuarioDePublicacion x == u = x : funcionAuxPublicacionesDe xs u
+                                   | otherwise = funcionAuxPublicacionesDe xs u    
 
+
+-- Ejercicio 7
 publicacionesQueLeGustanA :: RedSocial -> Usuario -> [Publicacion]
 publicacionesQueLeGustanA r u = publicacionesQueLeGustanAux (publicaciones r) u
 
+--Se armó esta funcion como para prestarle atencion a la lista de publicaciones de la RedSocial y que este más ordenada la funcion... 
+-- Se tiene la lista de Publicaciones de la RedSocial, tomo la primer publicacion (es decir, "x"), de ahí voy a querer mirar la lista de los usuarios que le dieron like (es decir, likeDePublicacion x).
+-- Entonces, una vez que tengo esa lista con los likes me va a servir para ver si alguno de esos usuarios coincide con el Usuario dado (para esto utilizo la funcion pertenece).
+-- En caso de que el Usuario dado se encuentre dentro de la lista de los likes, entonces esa publicacion va a formar parte de la lista.
+-- Con el primer caso que se cumpla esto, entonces sera la cabeza de la lista. De todas formas, debe continuar realizando la comparacion con la siguiente publicacion (aca se realiza la recursion).
+-- En caso de que el usuario no se encuentre en la lista de likes, entonces tambien se debe pasar a la siguiente publicacion para seguir analizando hasta pasar por todas las publicaciones.
 publicacionesQueLeGustanAux :: [Publicacion] -> Usuario -> [Publicacion]
 publicacionesQueLeGustanAux [] u = []
 publicacionesQueLeGustanAux (x:xs) u | pertenece u (likesDePublicacion x) = x : publicacionesQueLeGustanAux xs u
                                      | otherwise = publicacionesQueLeGustanAux xs u
---Se armó esta funcion como para prestarle atencion a la lista de publicaciones de la RedSocial y que este más ordenada la funcion... 
--- Se tiene la lista de Publicaciones de la RedSocial, tomo la primer publicacion (es decir, "x"), de ahí voy a querer mirar la lista de los usuarios que le dieron like (es decir, likeDePublicacion x).
--- Entonces, una vez que tengo esa lista con los likes me va a servir para ver si alguno de esos usuarios coincide con el Usuario dado (para esto utilizo la funcion pertenece).
---En caso de que el Usuario dado se encuentre dentro de la lista de los likes, entonces esa publicacion va a formar parte de la lista.
--- Con el primer caso que se cumpla esto, entonces sera la cabeza de la lista. De todas formas, debe continuar realizando la comparacion con la siguiente publicacion (aca se realiza la recursion).
--- En caso de que el usuario no se encuentre en la lista de likes, entonces tambien se debe pasar a la siguiente publicacion para seguir analizando hasta pasar por todas las publicaciones.
 
+
+-- Ejercicio 8
 -- describir qué hace la función: .....
 lesGustanLasMismasPublicaciones :: RedSocial -> Usuario -> Usuario -> Bool
 lesGustanLasMismasPublicaciones r u1 u2 = publicacionesQueLeGustanA r u1 == publicacionesQueLeGustanA r u2 
 
 
---Ejercicio 9: coloquialmente hablando, corrobora que exista algún un usuario2 (distinto del usuario de entrada) que le haya dado like a todas las publicaciones del usuario de entrada.
--- La logica esta en: publicacionesQueLeGustanA usuario2 = publicacionesDe usuarioDeEntrada; la cual se encuentra en la funcion "f1".
-
--- Otra manera de hacer tieneUnSeguidorFiel
-seguidorfiel :: RedSocial -> Usuario -> Bool
-seguidorfiel r u = f3 r u (publicacionesDe r u)
-
-f3 :: RedSocial -> Usuario -> [Publicacion] -> Bool 
-f3 r u p = f4 r u (likesDePublicacion (head p))
-
-f4 :: RedSocial -> Usuario -> [Usuario] -> Bool
-f4 r u [] = False
-f4 r u (x:xs) | mismosElementos (publicacionesDe r u) (publicacionesQueLeGustanA r x) = True
-              | otherwise = f4 r u xs
-
--- Lo que me interesa de aca es la lista de publicaciones perteneciente a la RedSocial y las publicaciones del Usuario dentro de esa RedSocial; van a ser utilizadas en las proximas funciones.
--- El resultado dependerá de las funciones siguientes.
+--Ejercicio 9
 tieneUnSeguidorFiel :: RedSocial -> Usuario -> Bool
-tieneUnSeguidorFiel r u = f2 r (publicaciones r) (publicacionesDe r u)  
+tieneUnSeguidorFiel red usuario = seguidorFielAux red usuario (usuarios red)
+
+-- En cada paso de la recursión, se examina un usuario de la lista. 
+-- Si el usuario es diferente al usuario de entrada y le gustan todas las publicaciones del usuario de entrada, entonces tenemos un seguidor fiel. La función devuelve True en este caso.
+-- Si el usuario no cumple con estas condiciones, se continúa con la recursión, pasando al siguiente usuario de la lista.
+-- Si se llega al final de la lista sin encontrar un seguidor fiel, la función devuelve False.
+seguidorFielAux :: RedSocial -> Usuario -> [Usuario] -> Bool
+seguidorFielAux _ _ [] = False
+seguidorFielAux red usuario (x:xs)
+  | usuario /= x && todosElementosEn (publicacionesDe red usuario) (publicacionesQueLeGustanA red x) = True
+  | otherwise = seguidorFielAux red usuario xs
 
 
---f2: RedSocial -> [lista de publicaciones pertenecientes a la red social] -> [Publicaciones del usuario de entrada de la funcion "tieneUnSeguidorFiel"]
--- Tomo la primer publicación, de la cual lo que me interesa es la lista de los likes (así lo puedo ingresar en la funcion "f1"). 
--- Si en caso f1 pasa por todos los usuarios y queda vacia devolviendo False, entonces pasamos a la siguiente publicacion, de la cual se va a tomar nuevamente la lista de likes para poder introducirlo en la funcion "f1" (recursion).
--- En caso no se haya encontrado publicaciones que cumplan con lo pedido, entonces la lista quedará vacia, devolviendo False.
-f2 :: RedSocial -> [Publicacion] -> [Publicacion] -> Bool 
-f2 r [] p1 = False
-f2 r (x:xs) p1 | f1 r (likesDePublicacion x) p1 = True
-               | otherwise = f2 r xs p1
-
---f1: RedSocial -> [usuario que le dieron me gusta a publicacion] -> [Publicaciones del usuario de entrada de la funcion "tieneUnSeguidorFiel"]
--- Esa lista con los "likes", sirve para tomar el primer usuario de la lista y llamar a la funcion "publicacionesQueLeGustan"; de esta forma nos devolverá todas las publicaciones que le gusten a ese usuario y servira para realizar la comparacion.
--- Se compara la lista de publicaciones que le gustan a un usuario dentro de la lista de likes con la lista de publicaciones del usuario de entrada; para esto se utiliza la funcion "mismosElementos".
--- En caso de que sean iguales, entonces devuelve True. Y si no, pasa al siguiente usuario para repetir lo mismo.
--- Si la lista queda vacia, es porque justamente no se encontró ningún usuario que cumpla lo pedido; por lo tanto, ahi devuelve False. Y es acá donde se pasaria en la funcion "f2" a la siguiente publicacion.
-f1 :: RedSocial -> [Usuario] -> [Publicacion] -> Bool
-f1 r [] p1 = False
-f1 r (y:ys) p1 | mismosElementos (publicacionesQueLeGustanA r y) p1 = True
-               | otherwise = f1 r ys p1
-
+-- Ejercicio 10
 -- describir qué hace la función: 
---deveulve el valor de verdad de una condicion dada por la union de tres condiciones que tienen que ser verdaderas
--- la lista de usuarios de la red tiene que ser mayor a >= 2, y esta lista debe empezar por u1 y terminar con u2
+
+-- Esta función verifica si existe una secuencia de amigos entre dos usuarios en la red social. 
 existeSecuenciaDeAmigos :: RedSocial -> Usuario -> Usuario -> Bool
-existeSecuenciaDeAmigos r u1 u2 = longitud (usuarios r) >= 2
-                                && empiezaCon u1 (usuarios r)
-                                && terminaCon u2 (usuarios r) 
+existeSecuenciaDeAmigos red u1 u2 = existeSecuenciaDeAmigosAux red u1 u2 []
+
+-- Se llama a la función auxiliar existeSecuenciaDeAmigosAux pasando la red social, el primer usuario, el segundo usuario y una lista de usuarios visitados (inicialmente vacía).
+-- Si el primer usuario es igual al segundo usuario, significa que se ha encontrado una secuencia de amigos, por lo que la función devuelve True.
+-- Si el primer usuario ya ha sido visitado anteriormente (se encuentra en la lista de visitados), se evita la recursión para evitar bucles infinitos, y la función devuelve False.
+-- En caso contrario, se realiza una llamada recursiva a la función existeSecuenciaDeAmigosAux para cada amigo del primer usuario. 
+-- Se agrega el primer usuario actual a la lista de visitados. Si alguna de las llamadas recursivas devuelve True, significa que se encontró una secuencia de amigos, y la función devuelve True.
+-- Si se recorren todos los amigos del primer usuario sin encontrar una secuencia de amigos, la función devuelve False.
+existeSecuenciaDeAmigosAux :: RedSocial -> Usuario -> Usuario -> [Usuario] -> Bool
+existeSecuenciaDeAmigosAux red u1 u2 visitados 
+  | u1 == u2 = True
+  | pertenece u1 visitados = False
+  | otherwise = existe (\amigo -> existeSecuenciaDeAmigosAux red amigo u2 (u1:visitados)) (amigosDe red u1)
 
 
 mismosElementos :: Eq a => [a] -> [a] -> Bool
@@ -255,8 +269,6 @@ auxiliar1 :: Usuario -> Publicacion -> Bool
 auxiliar1 u1 (u2,s,v) = u1 == u2
                         
                                                   
-
-
 noHayPublicacionesRepetidas :: [Publicacion] -> Bool
 noHayPublicacionesRepetidas [] = True
 noHayPublicacionesRepetidas (x:xs) | noPubliRepAux2 x xs = noHayPublicacionesRepetidas xs
@@ -275,21 +287,18 @@ noPubliRepAux1 ((a,b),s1,u1) ((c,d),s2,u2) | a == c &&  b == d = funcion1 s1 s2
 funcion1 :: String -> String -> Bool
 funcion1 s1 s2 = s1 /= s2
 
---
-
-
----
-
-empiezaCon :: (Eq t) => t -> [t] -> Bool
-empiezaCon n (x:xs) = n == x
-                    
-
-terminaCon :: (Eq t) => t -> [t] -> Bool
-terminaCon n [x] = True
-terminaCon n (x:xs) | n /= x = terminaCon n xs
-                    | otherwise = False
 
 sinRepetidos :: (Eq t) => [t] -> Bool
 sinRepetidos [] = True
 sinRepetidos (x:xs) | not (pertenece x xs) = sinRepetidos xs 
                     | otherwise = False 
+
+todosElementosEn :: Eq a => [a] -> [a] -> Bool
+todosElementosEn [] _ = True
+todosElementosEn (x:xs) ys = pertenece x ys && todosElementosEn xs ys
+
+existe :: (a -> Bool) -> [a] -> Bool
+existe _ [] = False
+existe n (x:xs)
+  | n x = True
+  | otherwise = existe n xs
