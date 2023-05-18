@@ -38,19 +38,21 @@ likesDePublicacion (_, _, us) = us
 -- Ejercicios
 
 -- Ejercicio 1
+-- Itera sobre la lista de usuarios tomando de cada tupla el segundo valor de ella,
+-- que por definicion es el nombre del usuario
 nombresDeUsuarios :: RedSocial -> [String]
 nombresDeUsuarios x = listaDeNombres (usuarios x)
 
 listaDeNombres :: [Usuario] -> [String]
 listaDeNombres [] = []
-listaDeNombres ((_, a):as) = a : listaDeNombres as
+listaDeNombres (a:as) = nombreDeUsuario a : listaDeNombres as
 
 
 -- Ejercicio 2
 -- Usa una funcion auxiliar amigosDeAux para iterar sobre las relaciones de la red,
 -- si usuario se encuentra en la relacion, se agrega al usuario con el cual está relacionado a una lista 'amigos'
 amigosDe :: RedSocial -> Usuario -> [Usuario]
-amigosDe (usuarios, relaciones, _) usuario = amigosDeAux relaciones []
+amigosDe red usuario = amigosDeAux (relaciones red) []
   where
     amigosDeAux [] amigos = amigos
     amigosDeAux ((u1, u2):rs) amigos
