@@ -52,13 +52,13 @@ listaDeNombres (a:as) = nombreDeUsuario a : listaDeNombres as
 -- Usa una funcion auxiliar amigosDeAux para iterar sobre las relaciones de la red,
 -- si usuario se encuentra en la relacion, se agrega al usuario con el cual está relacionado a una lista 'amigos'
 amigosDe :: RedSocial -> Usuario -> [Usuario]
-amigosDe red usuario = amigosDeAux (relaciones red) []
+amigosDe red usuario = amigosDeAux (relaciones red)
   where
-    amigosDeAux [] amigos = amigos
-    amigosDeAux ((u1, u2):rs) amigos
-      | u1 == usuario = amigosDeAux rs (amigos ++ [u2])
-      | u2 == usuario = amigosDeAux rs (amigos ++ [u1])
-      | otherwise = amigosDeAux rs amigos
+    amigosDeAux [] = []
+    amigosDeAux ((u1, u2):rs)
+      | u1 == usuario = u2 : amigosDeAux rs 
+      | u2 == usuario = u1 : amigosDeAux rs
+      | otherwise = amigosDeAux rs 
 
 -- Ejercicio 3
 -- Calcular la cantidad de amigos de un usuario
