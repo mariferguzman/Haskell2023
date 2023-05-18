@@ -1,4 +1,4 @@
-module Solution where
+module Solucion where
 -- Completar con los datos del grupo
 --
 -- Nombre de Grupo: sintaxError
@@ -47,16 +47,16 @@ listaDeNombres ((_, a):as) = a : listaDeNombres as
 
 
 -- Ejercicio 2
--- describir qué hace la función: .....
+-- Usa una funcion auxiliar amigosDeAux para iterar sobre las relaciones de la red,
+-- si usuario se encuentra en la relacion, se agrega al usuario con el cual está relacionado a una lista 'amigos'
 amigosDe :: RedSocial -> Usuario -> [Usuario]
-amigosDe (usuarios, relaciones, _) usuario = amigosDeRec relaciones []
+amigosDe (usuarios, relaciones, _) usuario = amigosDeAux relaciones []
   where
-    amigosDeRec [] amigos = amigos
-    amigosDeRec ((u1, u2):rs) amigos
-      | u1 == usuario && pertenece u2 usuarios && not (pertenece u2 amigos) = amigosDeRec rs (amigos ++ [u2])
-      | u2 == usuario && pertenece u1 usuarios && not (pertenece u1 amigos) = amigosDeRec rs (amigos ++ [u1])
-      | otherwise = amigosDeRec rs amigos
-
+    amigosDeAux [] amigos = amigos
+    amigosDeAux ((u1, u2):rs) amigos
+      | u1 == usuario = amigosDeAux rs (amigos ++ [u2])
+      | u2 == usuario = amigosDeAux rs (amigos ++ [u1])
+      | otherwise = amigosDeAux rs amigos
 
 -- Ejercicio 3
 -- Calcular la cantidad de amigos de un usuario
