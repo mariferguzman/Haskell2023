@@ -107,15 +107,15 @@ auxRC r (u:us)
 
 
 -- Ejercicio 6
--- funcionAux. Dada una lista de Publicaciones y el Usuario, obtengo una lista de Publicaciones pertenecientes a ese Usuario.
+-- Llama a ´funcionAuxPublicacionesDe´ e ingresa en la función: las publicaciones dentro de la RedSocial y el Usuario de entrada.
 publicacionesDe :: RedSocial -> Usuario -> [Publicacion]
 publicacionesDe r u = funcionAuxPublicacionesDe (publicaciones r) u 
 
---1.Tomo la primer publicacion de la lista.
---2.Comparo el usuario de la primer publicacion con el Usuario dado.
---3.Si son iguales, entonces lo quiero en la lista.
---Con la primera publicacion que suceda esto, sera la cabeza de la lista. Luego, tiene que proseguir con la siguiente publicacion. Para armar la lista, justamente utilizo la recursion.        
---En caso de que el usuario de la publicacion no coincida con el usuario dado, hay que pasar a la siguiente publicación y ver si ese coincide o no (y asi sucesivamente).
+--Tomo la primer publicacion de la lista.
+--Comparo el usuario de la primer publicacion con el Usuario dado.
+--Si son iguales, entonces lo quiero en el resultado(lista) y si no, no lo incluyo en la misma y paso a la siguiente publicacion.
+--Con la primera publicacion que suceda esto, sera la cabeza de la lista. Luego, tiene que proseguir con la siguiente publicacion y asi sucesivamente. Para armar la lista, utilizo la recursion.        
+--Va a recorrer por todas las publicaciones de la lista uno por uno hasta vaciarla; cuando sucede esto, termina la recursion y devuelve la lista con aquellas publicaciones que realizo el usuario.
 funcionAuxPublicacionesDe :: [Publicacion] -> Usuario -> [Publicacion]
 funcionAuxPublicacionesDe [] u = []
 funcionAuxPublicacionesDe (x:xs) u | usuarioDePublicacion x == u = x : funcionAuxPublicacionesDe xs u
@@ -125,21 +125,22 @@ funcionAuxPublicacionesDe (x:xs) u | usuarioDePublicacion x == u = x : funcionAu
 -- Ejercicio 7
 publicacionesQueLeGustanA :: RedSocial -> Usuario -> [Publicacion]
 publicacionesQueLeGustanA r u = publicacionesQueLeGustanAux (publicaciones r) u
+-- Llama a ´publicacionesQueLeGustan´ e ingresa en la función: las publicaciones dentro de la RedSocial y el Usuario de entrada
 
---Se armó esta funcion como para prestarle atencion a la lista de publicaciones de la RedSocial y que este más ordenada la funcion... 
--- Se tiene la lista de Publicaciones de la RedSocial, tomo la primer publicacion (es decir, "x"), de ahí voy a querer mirar la lista de los usuarios que le dieron like (es decir, likeDePublicacion x).
--- Entonces, una vez que tengo esa lista con los likes me va a servir para ver si alguno de esos usuarios coincide con el Usuario dado (para esto utilizo la funcion pertenece).
--- En caso de que el Usuario dado se encuentre dentro de la lista de los likes, entonces esa publicacion va a formar parte de la lista.
--- Con el primer caso que se cumpla esto, entonces sera la cabeza de la lista. De todas formas, debe continuar realizando la comparacion con la siguiente publicacion (aca se realiza la recursion).
--- En caso de que el usuario no se encuentre en la lista de likes, entonces tambien se debe pasar a la siguiente publicacion para seguir analizando hasta pasar por todas las publicaciones.
+--Tomo la primer publicacion de la lista.
+--Corroboro que el Usuario dado pertenezca a la lista de likes de esa publicacion.
+--Si se cumple esta condicion entonces lo quiero en el resultado(lista) y sera la cabeza de la misma; de lo contrario, no lo incluyo y paso a la siguiente publicacion.
+--Con la primera publicacion que suceda esto, sera la cabeza de la lista. Luego, tiene que proseguir con la siguiente publicacion y volver a realizar el paso anterior. Para armar la lista, utilizo la recursion.
+--Va a recorrer por todas las publicaciones de la lista uno por uno hasta vaciarla; cuando sucede esto, termina la recursion y devuelve la lista con aquellas publicaciones que el usuario le haya dado like.
 publicacionesQueLeGustanAux :: [Publicacion] -> Usuario -> [Publicacion]
 publicacionesQueLeGustanAux [] u = []
 publicacionesQueLeGustanAux (x:xs) u | pertenece u (likesDePublicacion x) = x : publicacionesQueLeGustanAux xs u
                                      | otherwise = publicacionesQueLeGustanAux xs u
 
 
+
 -- Ejercicio 8
--- describir qué hace la función: .....
+-- Corrobora que las publicaciones que le gustan al usuario1 sean iguales al usuario2, de ser asi devuelve True; en caso contrario, False.
 lesGustanLasMismasPublicaciones :: RedSocial -> Usuario -> Usuario -> Bool
 lesGustanLasMismasPublicaciones r u1 u2 = publicacionesQueLeGustanA r u1 == publicacionesQueLeGustanA r u2 
 
