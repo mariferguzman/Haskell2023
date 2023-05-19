@@ -84,15 +84,9 @@ usuarioConMasAmigosAux red (u:us)
     
 
 -- Ejercicio 5
--- describir qué hace la función: .....
+-- Evalua si existe usuario con 10+ amigos, solo lo comprueba con el usuario de mas amigos
 estaRobertoCarlos :: RedSocial -> Bool
-estaRobertoCarlos r = auxRC r (usuarios r)
-
-auxRC :: RedSocial -> [Usuario] -> Bool
-auxRC r [] = False
-auxRC r (u:us)
-  | cantidadDeAmigos r u >= 10 = True
-  | otherwise = auxRC r us
+estaRobertoCarlos r = cantidadDeAmigos r (usuarioConMasAmigos r) >= 10
 
 
 -- Ejercicio 6

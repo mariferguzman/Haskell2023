@@ -2,7 +2,7 @@ import Test.HUnit
 import Solucion
 
 main = runTestTT todosLosTest
-todosLosTest = test [testSuite1, testSuite2, testSuite3, testSuite4, testSuite5, testSuite6, testSuite7, testSuite10]
+todosLosTest = test [testSuite1, testSuite2, testSuite3, testSuite4, testSuite5, testSuite6, testSuite7, testSuite8 ,testSuite9, testSuite10]
 
 run1 = runTestTT testSuite1
 run2 = runTestTT testSuite2
@@ -64,12 +64,18 @@ testSuite7 = test [
 
 -- lesGustanLasMismasPublicaciones    
 testSuite8 = test [
-    " No le gustan las mismas publicaciones " ~: (lesGustanLasMismasPublicaciones redC usuario4 usuario10) ~?= False
+    " lesGustanLasMismasPublicaciones 2" ~: (lesGustanLasMismasPublicaciones redB usuario1 usuario3) ~?= True,
+    " lesGustanLasMismasPublicaciones ambos usuarios likean exactamente las mismas publicaciones" ~: (lesGustanLasMismasPublicaciones redH usuario8 usuario9) ~?= True,
+    " lesGustanLasMismasPublicaciones ambos usuarios likeen publicaciones distintas pero con alguna en comun" ~: (lesGustanLasMismasPublicaciones redH usuario9 usuario10 ) ~?= False,
+    " lesGustanLasMismasPublicaciones ambos usuarios likeen publicaciones distintas sin tener ninguna en comun" ~: (lesGustanLasMismasPublicaciones redH usuario7 usuario10) ~?= False
     ]
 
 -- tieneUnSeguidorFiel    
 testSuite9 = test [
-    " No tiene un seguidor fiel " ~: (tieneUnSeguidorFiel redC usuario2 ) ~?= False
+    " tieneUnSeguidorFiel 1" ~: (tieneUnSeguidorFiel redA usuario1) ~?= True,
+    " tieneUnSeguidorFiel el usuario tiene un solo seguidor fiel" ~: (tieneUnSeguidorFiel redI usuario9) ~?= True,
+    " tieneUnSeguidorFiel el usuario tiene más de un seguidor fiel" ~: (tieneUnSeguidorFiel redJ usuario7) ~?= True,
+    " tieneUnSeguidorFiel el usuario no tiene ningun seguidor fiel" ~: (tieneUnSeguidorFiel redK usuario8) ~?= False
     ]
 
 -- existeSecuenciaDeAmigos   
@@ -116,6 +122,11 @@ relacion9_12 = (usuario9, usuario12)
 relacion10_12 = (usuario10, usuario12)
 relacion11_12 = (usuario11, usuario12)
 relacion6_7 = (usuario6, usuario7)
+relacion7_8 = (usuario7, usuario8)
+relacion8_9 = (usuario8, usuario9)
+relacion7_9 = (usuario7, usuario9)
+relacion8_6 = (usuario8, usuario6)
+relacion9_10 = (usuario9, usuario10)
 
 publicacion1_1 = (usuario1, "Este es mi primer post", [usuario2, usuario4])
 publicacion1_2 = (usuario1, "Este es mi segundo post", [usuario4])
@@ -135,9 +146,21 @@ publicacion4_2 = (usuario4, "I am Bob", [])
 publicacion4_3 = (usuario4, "Just kidding, i am Mariela", [usuario1, usuario3])
 
 --Ejemplos Propios
-publicacion1_11 = (usuario2, "Hello World", [usuario1, usuario11])
-publicacion2_11 = (usuario2, "Hello World", [usuario2, usuario11])
-publicacion3_11 = (usuario2, "Hello World", [usuario3, usuario11])
+publicacion1_6 = (usuario1, "Hello Cruel World", [usuario1, usuario11])
+publicacion2_3 = (usuario2, "Hello Blue World", [usuario2, usuario11])
+publicacion3_4 = (usuario3, "Hello, Little World", [usuario3, usuario11])
+
+publicacion6_1 = (usuario6, "Hola amigos", [usuario8, usuario9,usuario10])
+publicacion7_2 = (usuario7, "Buen Dia", [usuario8, usuario9])
+publicacion8_1 = (usuario8, "Feliz", [usuario7])
+publicacion9_1 = (usuario9, "Buenas Tardes", [usuario10])
+publicacion7_1 = (usuario7, "Trabajando", [usuario8,usuario9,usuario10])
+publicacion7_3 = (usuario7, "Fin Jornada", [usuario8, usuario9])
+publicacion8_2 = (usuario8, "Soleado",[usuario6])
+publicacion9_2 = (usuario9, "Felicidad", [usuario10, usuario6])
+publicacion9_3 = (usuario9, "Paz", [usuario10,usuario7])
+
+
 
 
 usuariosA = [usuario1, usuario2, usuario3, usuario4]
@@ -153,7 +176,7 @@ redB = (usuariosB, relacionesB, publicacionesB)
 --Ejemplos propios
 usuariosC = [usuario1, usuario2, usuario3, usuario4, usuario5, usuario6, usuario7, usuario8, usuario9, usuario10, usuario11, usuario12]
 relacionesC = [relacion1_12, relacion2_12, relacion3_12, relacion4_12, relacion5_12, relacion6_12, relacion7_12, relacion8_12,relacion9_12,relacion10_12,relacion11_12]
-publicacionesC = [publicacion1_11, publicacion2_11, publicacion3_11]
+publicacionesC = [publicacion1_6, publicacion2_3, publicacion3_4]
 redC = (usuariosC, relacionesC, publicacionesC)
 --
 usuariosD = [usuario1, usuario2, usuario3, usuario4, usuario5]
@@ -170,5 +193,18 @@ redF = (usuariosD, relacionesD, publicacionesF)
 publicacionesG = [publicacion1_1, publicacion2_2, publicacion4_3]
 redG = (usuariosD, relacionesD, publicacionesG)
 
+usuariosH = [usuario6, usuario7, usuario8, usuario9, usuario10]
+relacionesH = [relacion6_7, relacion7_8, relacion8_6, relacion8_9]
+publicacionesH = [publicacion6_1, publicacion7_2, publicacion8_1, publicacion9_1]
+redH = (usuariosH, relacionesH, publicacionesH)
 
+relacionesI = [relacion7_8, relacion7_9, relacion8_6, relacion9_10]
+publicacionesI = [publicacion9_1, publicacion9_2, publicacion9_3, publicacion8_2]
+redI = (usuariosH, relacionesI, publicacionesI)
+
+publicacionesJ = [publicacion7_1, publicacion7_2, publicacion7_3, publicacion6_1]
+redJ = (usuariosH, relacionesI, publicacionesJ)
+
+publicacionesK = [publicacion8_1, publicacion8_2, publicacion6_1]
+redK = (usuariosH, relacionesI, publicacionesK)
 
