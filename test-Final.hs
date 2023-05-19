@@ -15,8 +15,11 @@ run8 = runTestTT testSuite8
 run9 = runTestTT testSuite9
 run10 = runTestTT testSuite10
 
+-- Los primeros casos de cada testSuite corresponden a los tests dados por la catedra.
+
 -- NombresDeUsuarios
 testSuite1 = test [
+    " nombresDeUsuarios 1" ~: (nombresDeUsuarios redA) ~?= ["Juan","Natalia","Pedro","Mariela"],
     "Caso 1: RedSocial vacía" ~: nombresDeUsuarios ([], [], []) ~?= [],
     "Caso 2: Un usuario" ~: nombresDeUsuarios ([(1, "Usuario1")], [], []) ~?= ["Usuario1"],
     "Caso 3: Varios usuarios, sin repetidos" ~: nombresDeUsuarios ([(1, "Usuario1"), (2, "Usuario2"), (3, "Usuario3")], [], []) ~?= ["Usuario1", "Usuario2", "Usuario3"]
@@ -24,30 +27,35 @@ testSuite1 = test [
 
 -- AmigosDe
 testSuite2 = test [
+    " amigosDe 1" ~: (amigosDe redA usuario1) ~?= [usuario2, usuario4],
     "Caso 1: Usuario con un amigo" ~: amigosDe redB usuario3 ~?= [usuario2],
     "Caso 2: Usuario sin amigos" ~: amigosDe redB usuario4 ~?= []
     ]
 
--- cantidadDEaAmigos
+-- cantidadDeAmigos
 testSuite3 = test [
+    " cantidadDeAmigos 1" ~: (cantidadDeAmigos redA usuario1) ~?= 2,
     " Caso 1: Usuario con 3 amigos" ~: (cantidadDeAmigos redA usuario4) ~?= 3,
     " Caso 2: Usuario sin amigos" ~: (cantidadDeAmigos redA usuario5) ~?= 0,
     " Caso 2: Usuario con mas amigos" ~: (cantidadDeAmigos redC usuario12) ~?= 11
     ]
 
--- cantidadDEaAmigos
+-- UsuarioConMasAmigos
 testSuite4 = test [
+    " usuarioConMasAmigos 1" ~: expectAny (usuarioConMasAmigos redA) [usuario2, usuario4],
     " Caso 1: Usuario con mas Amigos" ~: expectAny (usuarioConMasAmigos redA) [usuario2, usuario4, usuario11]
     ]
 
 --estaRobertoCarlos
 testSuite5 = test [
+    " estaRobertoCarlos 1" ~: (estaRobertoCarlos redA) ~?= False,
     " El famoso Roberto Carlos esta! " ~: (estaRobertoCarlos redC) ~?= True,
     " El famoso Roberto Carlos no esta..." ~: (estaRobertoCarlos redA) ~?= False
     ]
 
 -- publicacionesDe
 testSuite6 = test [
+    " publicacionesDe 1" ~: (publicacionesDe redA usuario2) ~?= [publicacion2_1, publicacion2_2],
     " publicacionesDe usuario con ninguna publicacion" ~: (publicacionesDe redD usuario5) ~?= [],
     " publicacionesDe usuario con una publicacion" ~: (publicacionesDe redE usuario1) ~?= [publicacion1_3],
     " publicacionesDe usuario con más de una publicacion" ~: (publicacionesDe redB usuario1) ~?= [publicacion1_3, publicacion1_4, publicacion1_5]
@@ -55,6 +63,7 @@ testSuite6 = test [
 
 --publicacionesQueLeGustanA
 testSuite7 = test [
+    " publicacionesQueLeGustanA 1" ~: (publicacionesQueLeGustanA redA usuario1) ~?= [publicacion2_2, publicacion4_1],
     " publicacionesQueLeGustanA usuario que no likee ninguna publicacion " ~: (publicacionesQueLeGustanA redF usuario1) ~?= [],
     " publicacionesQueLeGustanA usuario likee exactamente una sola publicacion" ~: (publicacionesQueLeGustanA redG usuario2) ~?= [publicacion1_1],
     " publicacionesQueLeGustanA usuario likee más de una publicacion de un mismo usuario" ~: (publicacionesQueLeGustanA redD usuario2) ~?= [publicacion1_1, publicacion1_3],
@@ -80,6 +89,7 @@ testSuite9 = test [
 
 -- existeSecuenciaDeAmigos   
 testSuite10 = test [
+    " existeSecuenciaDeAmigos 1" ~: (existeSecuenciaDeAmigos redA usuario1 usuario3) ~?= True,
     " Existe secuencia de amigos entre usuario1 y usuario3 " ~: (existeSecuenciaDeAmigos redA usuario1 usuario3) ~?= True,
     " Existe secuencia de amigos entre usuario1 y usuario5 " ~: (existeSecuenciaDeAmigos redA usuario1 usuario5) ~?= False,
     " Existe secuencia de amigos entre usuario4 y usuario3 " ~: (existeSecuenciaDeAmigos redA usuario4 usuario5) ~?= False
@@ -115,10 +125,8 @@ relacion2_12 = (usuario2, usuario12)
 relacion3_12 = (usuario3, usuario12)
 relacion4_12 = (usuario4, usuario12)
 relacion5_12 = (usuario5, usuario12)
-relacion6_12 = (usuario6, usuario12)
-relacion10_12 = (usuario10, usuario12)
-relacion11_12 = (usuario11, usuario12)
 relacion6_7 = (usuario6, usuario7)
+relacion6_12 = (usuario6, usuario12)
 relacion7_8 = (usuario7, usuario8)
 relacion7_9 = (usuario7, usuario9)
 relacion7_12 = (usuario7, usuario12)
@@ -127,6 +135,9 @@ relacion8_9 = (usuario8, usuario9)
 relacion8_12 = (usuario8, usuario12)
 relacion9_10 = (usuario9, usuario10)
 relacion9_12 = (usuario9, usuario12)
+relacion10_12 = (usuario10, usuario12)
+relacion11_12 = (usuario11, usuario12)
+
 
 publicacion1_1 = (usuario1, "Este es mi primer post", [usuario2, usuario4])
 publicacion1_2 = (usuario1, "Este es mi segundo post", [usuario4])
@@ -189,19 +200,19 @@ redF = (usuariosD, relacionesD, publicacionesF)
 --
 publicacionesG = [publicacion1_1, publicacion2_2, publicacion4_3]
 redG = (usuariosD, relacionesD, publicacionesG)
-
+--
 usuariosH = [usuario6, usuario7, usuario8, usuario9, usuario10]
 relacionesH = [relacion6_7, relacion7_8, relacion8_6, relacion8_9]
 publicacionesH = [publicacion6_1, publicacion7_2, publicacion8_1, publicacion9_1]
 redH = (usuariosH, relacionesH, publicacionesH)
-
+--
 relacionesI = [relacion7_8, relacion7_9, relacion8_6, relacion9_10]
 publicacionesI = [publicacion9_1, publicacion9_2, publicacion9_3, publicacion8_2]
 redI = (usuariosH, relacionesI, publicacionesI)
-
+--
 publicacionesJ = [publicacion7_1, publicacion7_2, publicacion7_3, publicacion6_1]
 redJ = (usuariosH, relacionesI, publicacionesJ)
-
+--
 publicacionesK = [publicacion8_1, publicacion8_2, publicacion6_1]
 redK = (usuariosH, relacionesI, publicacionesK)
 
