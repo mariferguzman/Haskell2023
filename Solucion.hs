@@ -63,21 +63,8 @@ amigosDe red usuario = amigosDeAux (relaciones red)
 -- Ejercicio 3
 -- Calcular la cantidad de amigos de un usuario
 cantidadDeAmigos :: RedSocial -> Usuario -> Int
-cantidadDeAmigos red usuario = contarAmigos red usuario 0
+cantidadDeAmigos red usuario = longitud (amigosDe red usuario)
 
--- Es una función auxiliar que realiza la recursión y utiliza un acumulador para contar los amigos
-contarAmigos :: RedSocial -> Usuario -> Int -> Int
-contarAmigos (_, relaciones, _) usuario acc = contarAmigosAux relaciones usuario acc
-
--- Esta función pasando el valor inicial del acumulador como 0.
--- Luego, la recursión se encarga de verificar las relaciones y aumentar el acumulador en caso de encontrar amigos válidos.
--- Al final, el valor del acumulador será la cantidad de amigos del usuario.
-contarAmigosAux :: [Relacion] -> Usuario -> Int -> Int
-contarAmigosAux [] _ acc = acc
-contarAmigosAux ((u1, u2):rs) usuario acc
-  | u1 == usuario = contarAmigosAux rs usuario (acc + 1)
-  | u2 == usuario = contarAmigosAux rs usuario (acc + 1)
-  | otherwise = contarAmigosAux rs usuario acc
 
 -- Ejercicio 4
 -- Función principal para encontrar el usuario con más amigos
@@ -196,7 +183,7 @@ perteneceTodos :: Eq a => [a] -> [a] -> Bool
 perteneceTodos [] _ = True
 perteneceTodos (x:xs) ys = pertenece x ys && perteneceTodos xs ys
 
-longitud :: [t] -> Integer
+longitud :: [t] -> Int
 longitud [] = 0
 longitud (x:xs) = longitud xs + 1
 
